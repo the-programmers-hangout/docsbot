@@ -1,6 +1,7 @@
 package me.aberrantfox.docsbot.configuration
 
 import com.google.gson.GsonBuilder
+import me.aberrantfox.docsbot.utility.FileConstants
 import java.io.File
 
 
@@ -10,7 +11,7 @@ data class BotConfiguration (
 )
 
 private val gson = GsonBuilder().setPrettyPrinting().create()
-private val file = File("config.json")
+private val file = File("${FileConstants.Configuration_Directory}config.json")
 
 fun loadConfig() =
         if (file.exists()) {
