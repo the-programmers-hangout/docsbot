@@ -2,13 +2,14 @@ package me.aberrantfox.docsbot.commands
 
 import me.aberrantfox.docsbot.services.DocGrabber
 import me.aberrantfox.docsbot.services.DocReader
+import me.aberrantfox.docsbot.services.LanguageFormatter
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.internal.command.arguments.WordArg
 
 
 @CommandSet("docs")
-fun mdn(docGrabber: DocGrabber, docReader: DocReader) = commands {
+fun mdn(docGrabber: DocGrabber, docReader: DocReader, formatter: LanguageFormatter) = commands {
     command("updatedocs") {
         description = "Update all of the available documentation"
         execute {
@@ -27,7 +28,7 @@ fun mdn(docGrabber: DocGrabber, docReader: DocReader) = commands {
             if(result == null) {
                 it.respond("unknown")
             } else {
-                it.respond(result)
+                it.respond(formatter.format("javascript", result))
             }
         }
     }
