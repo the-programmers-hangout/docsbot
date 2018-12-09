@@ -23,8 +23,7 @@ fun main(args: Array<String>) {
 }
 
 fun start(token: String, config: BotConfiguration) = startBot(token) {
-    val docGrabber = DocGrabber(config)
-    docGrabber.pullAllDocs()
+    val docGrabber = DocGrabber(config).apply { pullAllDocs() }
     val reader = DocReader(config).apply { collectAllDocs() }
 
     registerInjectionObject(config, docGrabber, reader)
