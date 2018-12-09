@@ -1,5 +1,6 @@
 package me.tph.docsbot.languages
 
+import me.tph.docsbot.DocsRequest
 import me.tph.docsbot.DocsResponse
 import me.tph.docsbot.fetchDocs
 import me.tph.docsbot.createDocs
@@ -38,13 +39,17 @@ fun fetch(method: String): String? {
 }
 
 val javascript = createDocs("javascript") {
-    val x: String = it.docs["global_objects/${it.input}"].toString()
-    val soup = Jsoup.parse(x)
-    val title = soup.select("h1").first().text()
-    val explanation = soup.select("p").first()?.text().orEmpty()
-    DocsResponse(
-        title = title,
-        body = explanation,
-        example = fetchRelevantCodeblock(soup)
-    )
+    icon = "https://cdn2.iconfinder.com/data/icons/designer-skills/128/code-programming-javascript-software-develop-command-language-512.png"
+    execute = {
+        val x: String = it.docs["global_objects/${it.input}"].toString()
+        val soup = Jsoup.parse(x)
+        val title = soup.select("h1").first().text()
+        val explanation = soup.select("p").first()?.text().orEmpty()
+        DocsResponse(
+            title = title,
+            body = explanation,
+            link = "yeet",
+            example = fetchRelevantCodeblock(soup)
+        )
+    }
 }

@@ -2,11 +2,9 @@ package me.tph.docsbot
 
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
-import me.aberrantfox.kjdautils.api.dsl.embed
-import net.dv8tion.jda.core.entities.EmbedType
+import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.MessageEmbed
 import java.io.File
-import java.lang.Exception
 import java.net.URL
 
 typealias Documentation = LinkedTreeMap<*, *>;
@@ -14,7 +12,19 @@ typealias Documentation = LinkedTreeMap<*, *>;
 var docsCache = HashMap<String, Documentation>()
 val gson = Gson()
 
-data class DocsResponse(val title: String, val body: String, val example: String?)
+data class DocsResponse(val title: String, val body: String, val example: String?, val link: String)
+
+class DocsConfig {
+    var icon: String? = ""
+    var execute: (input: DocsRequest) -> DocsResponse = {
+        DocsResponse(
+            title = "",
+            body = "",
+            example = "",
+            link = ""
+        )
+    }
+}
 
 data class DocsRequest(
     val detailed: Boolean,
@@ -57,19 +67,24 @@ fun fetchDocs(language: String): LinkedTreeMap<*, *> {
     return parsed
 }
 
-fun createDocs(language: String, handler: (DocsRequest) -> DocsResponse): (input: String) -> MessageEmbed {
+fun createDocs(language: String, construct: DocsConfig.() -> Unit): (input: String) -> MessageEmbed {
     return {
+        val config = DocsConfig()
+        config.construct()
         val docs = fetchDocs(language)
         val request = DocsRequest(
             input = it,
             docs = docs,
             detailed = true
         )
-        val out = handler(request)
+        val out = config.execute(request)
         val codeblock = "```$language\n${out.example}\n```"
-        embed {
-            title("**${out.title}**")
-            description("${out.body}\n$codeblock")
+        val embed = EmbedBuilder()
+            .setDescription("${out.body}\n$codeblock")
+        if (!config.icon.isNullOrEmpty()) {
+            embed.setAuthor(out.title, config.icon, config.icon).build()
+        } else {
+            embed.setAuthor(out.title).build()
         }
     }
 }
