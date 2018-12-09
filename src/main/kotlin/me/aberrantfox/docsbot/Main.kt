@@ -4,6 +4,7 @@ import me.aberrantfox.docsbot.configuration.BotConfiguration
 import me.aberrantfox.docsbot.configuration.loadConfig
 import me.aberrantfox.docsbot.services.DocGrabber
 import me.aberrantfox.docsbot.services.DocReader
+import me.aberrantfox.docsbot.utility.FileConstants
 import me.aberrantfox.kjdautils.api.dsl.PrefixDeleteMode
 import me.aberrantfox.kjdautils.api.startBot
 
@@ -22,7 +23,7 @@ fun main(args: Array<String>) {
 }
 
 fun start(token: String, config: BotConfiguration) = startBot(token) {
-    val docGrabber = DocGrabber(config)
+    val docGrabber = DocGrabber(config).apply { pullAllDocs() }
     val reader = DocReader(config).apply { collectAllDocs() }
 
     registerInjectionObject(config, docGrabber, reader)
