@@ -2,5 +2,4 @@ src/main/kotlin/me/tph/docsbot/settings.kt
 .idea/
 *.iml
 target/
-docs/**
-config.json
+docbot/**
