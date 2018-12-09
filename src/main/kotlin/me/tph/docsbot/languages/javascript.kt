@@ -1,11 +1,10 @@
-package me.tph.docsbot.docs
-import com.google.gson.Gson
-import com.google.gson.internal.LinkedTreeMap
+package me.tph.docsbot.languages
+
+import me.tph.docsbot.DocsResponse
 import me.tph.docsbot.fetchDocs
 import me.tph.docsbot.createDocs
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import java.io.File
 import java.net.URL
 
 
@@ -39,5 +38,13 @@ fun fetch(method: String): String? {
 }
 
 val javascript = createDocs("javascript") {
-
+    val x: String = it.docs["global_objects/${it.input}"].toString()
+    val soup = Jsoup.parse(x)
+    val title = soup.select("h1").first().text()
+    val explanation = soup.select("p").first()?.text().orEmpty()
+    DocsResponse(
+        title = title,
+        body = explanation,
+        example = fetchRelevantCodeblock(soup)
+    )
 }

@@ -2,20 +2,25 @@ package me.tph.docsbot
 
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
+import me.aberrantfox.kjdautils.api.dsl.embed
+import net.dv8tion.jda.core.entities.EmbedType
+import net.dv8tion.jda.core.entities.MessageEmbed
 import java.io.File
 import java.lang.Exception
 import java.net.URL
 
 typealias Documentation = LinkedTreeMap<*, *>;
+
 var docsCache = HashMap<String, Documentation>()
 val gson = Gson()
 
-data class DocsResponse(val body: String, val example: String?)
+data class DocsResponse(val title: String, val body: String, val example: String?)
 
-interface DocsHook {
-    fun isValid(input: String): Boolean
-    fun fetch(input: String): DocsResponse
-}
+data class DocsRequest(
+    val detailed: Boolean,
+    val input: String,
+    val docs: Documentation
+)
 
 fun toDocs(content: String): Documentation = gson.fromJson(content, LinkedTreeMap::class.java)
 
@@ -52,10 +57,19 @@ fun fetchDocs(language: String): LinkedTreeMap<*, *> {
     return parsed
 }
 
-fun createDocs(language: String, handler: (docs: Documentation) -> DocsResponse): (input: String) -> String {
+fun createDocs(language: String, handler: (DocsRequest) -> DocsResponse): (input: String) -> MessageEmbed {
     return {
         val docs = fetchDocs(language)
-        val (body, example) = handler(docs)
-        body // something like that
+        val request = DocsRequest(
+            input = it,
+            docs = docs,
+            detailed = true
+        )
+        val out = handler(request)
+        val codeblock = "```$language\n${out.example}\n```"
+        embed {
+            title("**${out.title}**")
+            description("${out.body}\n$codeblock")
+        }
     }
 }
