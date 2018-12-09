@@ -3,13 +3,9 @@ package me.tph.docsbot
 import me.aberrantfox.kjdautils.api.dsl.CommandSet
 import me.aberrantfox.kjdautils.api.dsl.commands
 import me.aberrantfox.kjdautils.internal.command.arguments.SentenceArg
+import me.tph.docsbot.docs.fetch
 
-data class DocsResponse(val body: String, val example: String?)
 
-interface DocsHook {
-    fun isValid(input: String): Boolean
-    fun fetch(input: String): DocsResponse
-}
 
 @CommandSet("Docs")
 fun mdn() = commands {

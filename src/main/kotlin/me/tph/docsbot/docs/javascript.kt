@@ -1,15 +1,13 @@
-package me.tph.docsbot
+package me.tph.docsbot.docs
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
+import me.tph.docsbot.fetchDocs
+import me.tph.docsbot.createDocs
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.io.File
 import java.net.URL
 
-val gson = Gson()
-fun readFile(name: String) = File(name).readText()
-
-fun fetchJsData() = gson.fromJson(readFile("src/main/resources/database/js.json"), LinkedTreeMap::class.java)
 
 fun extractCodeblock(soup: Document) = soup
     .select("pre[data-language=\"js\"]")
@@ -34,8 +32,12 @@ fun fetchRelevantCodeblock(soup: Document): String? {
 }
 
 fun fetch(method: String): String? {
-    val items = fetchJsData()
+    val items = fetchDocs("javascript")
     val x: String = items["global_objects/$method"].toString()
     val soup = Jsoup.parse(x)
     return fetchRelevantCodeblock(soup)
+}
+
+val javascript = createDocs("javascript") {
+
 }
