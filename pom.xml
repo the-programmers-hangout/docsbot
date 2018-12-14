@@ -15,9 +15,15 @@
         <kutils.version>0.9.4</kutils.version>
         <jsoup.version>1.8.3</jsoup.version>
         <slf4j.version>1.7.25</slf4j.version>
+        <apache-commons.version>1.6</apache-commons.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>${apache-commons.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
