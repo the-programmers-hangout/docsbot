@@ -8,9 +8,8 @@ import org.jsoup.nodes.Element
 class JavaScriptFormatter {
     fun format(html: String): MessageEmbed {
         val body = Jsoup.parse(html).body()
-        val iframe = body.getElementsByClass("interactive-js").first()
 
-        val code = getInteractiveJS(iframe)
+        val code = getCodeExample(body)
         val description = body.select("p").first().text()
 
         return embed {
@@ -26,10 +25,23 @@ class JavaScriptFormatter {
         }
     }
 
-    private fun getInteractiveJS(iframe: Element): String {
-        val link = iframe.attr("src")
-        val code = Jsoup.connect(link).execute().parse().body().getElementById("static-js").text()
+    private fun getCodeExample(body: Element): String {
+        val iframe = body.getElementsByClass("interactive-js")
+
+        val code = if(iframe.isNotEmpty()) {
+            getIframeCode(iframe .first())
+        } else {
+            getOtherSampleCode(body)
+        }
 
         return "```js\n$code```"
     }
+
+    private fun getIframeCode(iframe: Element): String {
+        val link = iframe.attr("src")
+        return Jsoup.connect(link).execute().parse().body().getElementById("static-js").text()
+    }
+
+    private fun getOtherSampleCode(body: Element) =
+            body.getElementsByAttribute("data-language").first().text()
 }
