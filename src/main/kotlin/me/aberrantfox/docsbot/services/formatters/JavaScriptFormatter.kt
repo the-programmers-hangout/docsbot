@@ -1,12 +1,16 @@
 package me.aberrantfox.docsbot.services.formatters
 
+import me.aberrantfox.docsbot.services.HTMLFormatter
+import me.aberrantfox.docsbot.services.LanguageFormatter
+import me.aberrantfox.docsbot.utility.LanguageConstants
 import me.aberrantfox.kjdautils.api.dsl.embed
 import net.dv8tion.jda.core.entities.MessageEmbed
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 
-class JavaScriptFormatter {
-    fun format(html: String): MessageEmbed {
+@HTMLFormatter(LanguageConstants.JavaScript)
+class JavaScriptFormatter : LanguageFormatter {
+    override fun format(html: String): MessageEmbed {
         val body = Jsoup.parse(html).body()
 
         val code = getCodeExample(body)
