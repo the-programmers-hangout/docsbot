@@ -13,6 +13,8 @@ data class BotConfiguration (
 private val gson = GsonBuilder().setPrettyPrinting().create()
 
 fun loadConfig(root: String): BotConfiguration? {
+    File(root).mkdir()
+    File("$root${File.separator}${FileConstants.Configuration_Directory}").mkdir()
     val file = getFile(root)
 
     if (file.exists()) return gson.fromJson(file.readText(), BotConfiguration::class.java)
