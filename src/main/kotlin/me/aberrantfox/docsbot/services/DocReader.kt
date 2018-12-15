@@ -3,6 +3,7 @@ package me.aberrantfox.docsbot.services
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import me.aberrantfox.docsbot.configuration.BotConfiguration
+import me.aberrantfox.docsbot.configuration.DirectoryConfiguration
 import me.aberrantfox.docsbot.utility.FileConstants
 import org.apache.commons.text.similarity.LevenshteinDistance
 import java.io.File
@@ -10,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 private const val IndexKey = "index"
 
-class DocReader(private val config: BotConfiguration) {
+class DocReader(private val config: BotConfiguration, private val dirConfiguration: DirectoryConfiguration) {
     private val cache: ConcurrentHashMap<String, JsonObject> = ConcurrentHashMap()
     private val threshold = 10000
     private val levenshtein = LevenshteinDistance(threshold)
@@ -52,15 +53,12 @@ class DocReader(private val config: BotConfiguration) {
         }
 
         return findBestMatch(keys, languageObj)
-
-
-//        return languageObj[key].asString
     }
 
     fun collectAllDocs() = config.languages.forEach { collectDocs(it) }
 
     fun collectDocs(language: String) {
-        val database = File(FileConstants.dbFilePath(language)).readText()
+        val database = File(dirConfiguration.dbFilePath(language)).readText()
         val json = extractJsonObject(database)
 
         cache[language] = json
