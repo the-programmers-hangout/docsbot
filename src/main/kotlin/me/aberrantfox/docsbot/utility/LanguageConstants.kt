@@ -1,6 +1,6 @@
 package me.aberrantfox.docsbot.utility
 
-//Must be companion for Enum values
-class LanguageConstants { companion object {
+object LanguageConstants {
     const val JavaScript = "javascript"
-}}
+    const val Java = "java"
+}

@@ -1,15 +1,16 @@
 package me.aberrantfox.docsbot.services
 
 import me.aberrantfox.docsbot.configuration.BotConfiguration
+import me.aberrantfox.docsbot.configuration.DirectoryConfiguration
 import me.aberrantfox.docsbot.utility.FileConstants
 import me.aberrantfox.docsbot.utility.URLConstants
 import org.jsoup.Jsoup
 import java.io.File
 
 
-class DocGrabber(val config: BotConfiguration) {
+class DocGrabber(val config: BotConfiguration, val dirConfiguration: DirectoryConfiguration) {
     fun pullAllDocs() {
-        FileConstants.Documentation_Directory_File.listFiles().forEach { it.delete() }
+        dirConfiguration.documentationDirectory.listFiles().forEach { it.delete() }
         config.languages.forEach { pullDocs(it) }
     }
 
@@ -24,7 +25,7 @@ class DocGrabber(val config: BotConfiguration) {
             .execute()
             .body()
 
-        File(FileConstants.dbFilePath(language)).writeText(content)
+        File(dirConfiguration.dbFilePath(language)).writeText(content)
 
         return true
     }

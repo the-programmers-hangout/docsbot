@@ -18,8 +18,9 @@
         <slf4j.version>1.7.25</slf4j.version>
         <apache-commons.version>1.6</apache-commons.version>
         <spek.version>2.0.0-alpha.2</spek.version>
-        <mockito.version>2.0.0</mockito.version>
         <surefire.version>2.22.0</surefire.version>
+        <clikt.version>1.6.0</clikt.version>
+        <mockk.version>1.8.13</mockk.version>
     </properties>
 
     <dependencies>
@@ -84,6 +85,11 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.ajalt</groupId>
+            <artifactId>clikt</artifactId>
+            <version>${clikt.version}</version>
+        </dependency>
 
         <!-- Test Dependencies -->
         <dependency>
@@ -121,9 +127,9 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.nhaarman.mockitokotlin2</groupId>
-            <artifactId>mockito-kotlin</artifactId>
-            <version>${mockito.version}</version>
+            <groupId>io.mockk</groupId>
+            <artifactId>mockk</artifactId>
+            <version>${mockk.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
