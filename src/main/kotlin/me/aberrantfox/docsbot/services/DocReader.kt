@@ -49,7 +49,7 @@ class DocReader(private val config: BotConfiguration, private val dirConfigurati
         val languageObj = cache[language]!!
         val perfectMatch = keys.firstOrNull { languageObj.has(it) }
         if (!perfectMatch.isNullOrBlank()) {
-            return perfectMatch
+            return languageObj[perfectMatch].asString
         }
 
         return findBestMatch(keys, languageObj)
