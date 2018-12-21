@@ -2,6 +2,7 @@ package me.aberrantfox.docsbot.services
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import com.google.gson.JsonPrimitive
 import me.aberrantfox.docsbot.configuration.BotConfiguration
 import me.aberrantfox.docsbot.utility.FileConstants
 import org.apache.commons.text.similarity.LevenshteinDistance
@@ -48,11 +49,11 @@ class DocReader(private val config: BotConfiguration) {
         val languageObj = cache[language]!!
         val perfectMatch = keys.firstOrNull { languageObj.has(it) }
         if (!perfectMatch.isNullOrBlank()) {
-            return perfectMatch
+            return languageObj[perfectMatch].asString
         }
 
-        return findBestMatch(keys, languageObj)
-
+        val best = findBestMatch(keys, languageObj)
+        return languageObj[best].asString
 
 //        return languageObj[key].asString
     }
