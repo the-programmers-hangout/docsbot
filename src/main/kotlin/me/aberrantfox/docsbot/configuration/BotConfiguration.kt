@@ -7,7 +7,7 @@ import java.io.File
 
 data class BotConfiguration (
     val prefix: String = "!",
-    val languages: Set<String> = HashSet()
+    val languages: Set<String> = hashSetOf("javascript")
 )
 
 private val gson = GsonBuilder().setPrettyPrinting().create()
