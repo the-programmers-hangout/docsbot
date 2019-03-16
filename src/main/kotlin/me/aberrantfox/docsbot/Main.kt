@@ -15,7 +15,6 @@ import kotlin.reflect.full.declaredMemberProperties
 private const val path = "me.aberrantfox.docsbot."
 
 fun main(args: Array<String>) {
-    val token = args.first()
     val config = loadConfig()
 
     if(config == null) {
@@ -23,6 +22,7 @@ fun main(args: Array<String>) {
         return
     }
 
+    val token = args.first()
     start(token, config)
 }
 
